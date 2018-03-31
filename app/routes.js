@@ -8,6 +8,28 @@ module.exports = function(app, passport) {
 		res.render('index.ejs'); // load the index.ejs file
 	});
 
+
+    // SHOW ADD USER FORM
+    app.get('/dashbossfard', isLoggedIn,function(req, res, next){
+        // render to views/user/add.ejs
+        res.render('Dashboard/index', {
+            title: 'Add New User',
+            name: '',
+            age: '',
+            email: ''
+        })
+    })
+    // SHOW ADD USER FORM
+    app.get('/category', isLoggedIn,function(req, res, next){
+        // render to views/user/add.ejs
+        res.render('Category/add', {
+            title: 'Add New User',
+            name: '',
+            age: '',
+            email: ''
+        })
+    })
+
 	// =====================================
 	// LOGIN ===============================
 	// =====================================
