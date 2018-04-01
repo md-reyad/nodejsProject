@@ -1,32 +1,46 @@
 <!--
 including header content which is common for all pages
 -->
-<%- include ../layouts/header.ejs %>	
+<%- include ../layouts/header.ejs %>
+
+<div id="page-wrapper">
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header">Dashboard</h1>
+			<div id="app">
+				{{ message }}
+                <button  v-on:click="insert">Submit</button>
+			</div>
+		</div>
+		<!-- /.col-lg-12 -->
+	</div>
+</div>
+	<!-- /.row -->
 
 
-<form action="/users/edit/<%= id %>" method="post" name="form1">
-	<table width="25%" border="0">
-		<tr> 
-			<td>Name</td>
-			<td><input type="text" name="name" id="name" value="<%= name %>" /></td>
-		</tr>
-		<tr> 
-			<td>Age</td>
-			<td><input type="text" name="age" value="<%= age %>" /></td>
-		</tr>
-		<tr> 
-			<td>Email</td>
-			<td><input type="text" name="email" value="<%= email %>" /></td>
-		</tr>
-		<tr> 
-			<td></td>
-			<td><input type="submit" name="Submit" value="Edit" /></td>
-		</tr>
-	</table>
-	<input type="hidden" name="_method" value="PUT" />
-</form>
+
+
 
 <!--
 including footer content which is common for all pages
 -->
 <%- include ../layouts/footer.ejs %>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!'
+        },
+        methods:{
+            insert:function(){
+                let vueInstance = this; //This line is important
+
+                axios.post('/vue', {areamodel: "helsldfsd"}).then(
+                    function(response){
+                        vueInstance.areamodel = response.data.areamodel;
+                    }
+                ).catch(function(error){ console.log(error.message); });
+            }
+        }
+    })
+</script>

@@ -10,7 +10,7 @@ module.exports = function(app, passport) {
 
 
     // SHOW ADD USER FORM
-    app.get('/dashbossfard', isLoggedIn,function(req, res, next){
+    app.get('/dashboard', isLoggedIn,function(req, res, next){
         // render to views/user/add.ejs
         res.render('Dashboard/index', {
             title: 'Add New User',
@@ -19,8 +19,12 @@ module.exports = function(app, passport) {
             email: ''
         })
     })
+
+    app.post('/vue',function(req, res, next){
+   console.log(req.body.areamodel);
+    })
     // SHOW ADD USER FORM
-    app.get('/category', isLoggedIn,function(req, res, next){
+    app.get('/category',function(req, res, next){
         // render to views/user/add.ejs
         res.render('Category/add', {
             title: 'Add New User',

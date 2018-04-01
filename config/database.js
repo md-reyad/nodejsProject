@@ -1,10 +1,10 @@
 // config/database.js
 module.exports = {
     'connection': {
-        'host': 'localhost',
-        'user': 'root',
-        'password': ''
+        'host': '192.168.152.221',
+        'user': 'ocpl',
+        'password': 'ocpl@321'
     },
-	'database': 'test',
+	'database': 'test_db',
     'users_table': 'users'
 };
