@@ -20,8 +20,18 @@ module.exports = function(app, passport) {
         })
     })
 
-    app.post('/vue',function(req, res, next){
-   console.log(req.body.areamodel);
+    app.post('/category/store',function(req, res, next){
+    // var name = req.body.data.name;
+            req.getConnection(function(error, conn) {
+                conn.query('INSERT INTO category SET ?', req.body.data, function(err, result) {
+                    //if(err) throw err
+                    if (err) {
+                        res.json({ responseCode: 0,messages:err});
+                    } else {
+                        res.json({ responseCode: 1,messages:'Data added successfully!'});
+                    }
+                })
+            })
     })
     // SHOW ADD USER FORM
     app.get('/category',function(req, res, next){
@@ -31,6 +41,19 @@ module.exports = function(app, passport) {
             name: '',
             age: '',
             email: ''
+        })
+    })
+
+    app.get('/category/list',function(req, res, next){
+        req.getConnection(function(error, conn) {
+            conn.query('SELECT * from category', function(err, result) {
+                //if(err) throw err
+                if (err) {
+                    res.json({ responseCode: 0,messages:err});
+                } else {
+                    res.json({ responseCode: 1,data:result});
+                }
+            })
         })
     })
 
@@ -46,7 +69,7 @@ module.exports = function(app, passport) {
 
 	// process the login form
 	app.post('/login', passport.authenticate('local-login', {
-            successRedirect : '/profile', // redirect to the secure profile section
+            successRedirect : '/dashboard', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
 		}),
