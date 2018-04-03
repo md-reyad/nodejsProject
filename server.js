@@ -10,8 +10,20 @@ var morgan = require('morgan');
 var app      = express();
 var port     = process.env.PORT || 8080;
 
+var mysql = require('mysql')
+var myConnection  = require('express-myconnection')
 var passport = require('passport');
 var flash    = require('connect-flash');
+
+var config = require('./configs')
+var dbOptions = {
+    host:      config.database.host,
+    user:       config.database.user,
+    password: config.database.password,
+    port:       config.database.port,
+    database: config.database.db
+}
+app.use(myConnection(mysql, dbOptions, 'pool'))
 
 // configuration ===============================================================
 // connect to our database
@@ -28,6 +40,8 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
+var expressValidator = require('express-validator')
+app.use(expressValidator())
 
 app.set('view engine', 'ejs'); // set up ejs for templating
 

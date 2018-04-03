@@ -10,7 +10,7 @@ module.exports = function(app, passport) {
 
 
     // SHOW ADD USER FORM
-    app.get('/dashbossfard', isLoggedIn,function(req, res, next){
+    app.get('/dashboard', isLoggedIn,function(req, res, next){
         // render to views/user/add.ejs
         res.render('Dashboard/index', {
             title: 'Add New User',
@@ -19,14 +19,41 @@ module.exports = function(app, passport) {
             email: ''
         })
     })
+
+    app.post('/category/store',function(req, res, next){
+    // var name = req.body.data.name;
+            req.getConnection(function(error, conn) {
+                conn.query('INSERT INTO category SET ?', req.body.data, function(err, result) {
+                    //if(err) throw err
+                    if (err) {
+                        res.json({ responseCode: 0,messages:err});
+                    } else {
+                        res.json({ responseCode: 1,messages:'Data added successfully!'});
+                    }
+                })
+            })
+    })
     // SHOW ADD USER FORM
-    app.get('/category', isLoggedIn,function(req, res, next){
+    app.get('/category',function(req, res, next){
         // render to views/user/add.ejs
         res.render('Category/add', {
             title: 'Add New User',
             name: '',
             age: '',
             email: ''
+        })
+    })
+
+    app.get('/category/list',function(req, res, next){
+        req.getConnection(function(error, conn) {
+            conn.query('SELECT * from category', function(err, result) {
+                //if(err) throw err
+                if (err) {
+                    res.json({ responseCode: 0,messages:err});
+                } else {
+                    res.json({ responseCode: 1,data:result});
+                }
+            })
         })
     })
 
@@ -42,7 +69,7 @@ module.exports = function(app, passport) {
 
 	// process the login form
 	app.post('/login', passport.authenticate('local-login', {
-            successRedirect : '/profile', // redirect to the secure profile section
+            successRedirect : '/dashboard', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
 		}),

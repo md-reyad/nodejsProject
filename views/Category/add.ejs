@@ -1,32 +1,112 @@
 <!--
 including header content which is common for all pages
 -->
-<%- include ../layouts/header.ejs %>	
+<%- include ../layouts/header.ejs %>
+
+<div id="page-wrapper">
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header">Category</h1>
+
+			<div id="app">
+                <div class="alert alert-success" v-if="messages">{{ messages }}</div>
+                <div class="alert alert-danger" v-if="error">{{ error }}</div>
+                <form action="#">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Category Name</label>
+                        <input class="form-control" id="add-name" v-model="data.name" required/>
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Status</label>
+                        <input type="text" class="form-control"  v-model="data.status" id="exampleInputPassword1" placeholder="statsf">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <button type="button"  v-on:click="insert">Submit</button>
+                </form>
 
 
-<form action="/users/edit/<%= id %>" method="post" name="form1">
-	<table width="25%" border="0">
-		<tr> 
-			<td>Name</td>
-			<td><input type="text" name="name" id="name" value="<%= name %>" /></td>
-		</tr>
-		<tr> 
-			<td>Age</td>
-			<td><input type="text" name="age" value="<%= age %>" /></td>
-		</tr>
-		<tr> 
-			<td>Email</td>
-			<td><input type="text" name="email" value="<%= email %>" /></td>
-		</tr>
-		<tr> 
-			<td></td>
-			<td><input type="submit" name="Submit" value="Edit" /></td>
-		</tr>
-	</table>
-	<input type="hidden" name="_method" value="PUT" />
-</form>
+                <table class="table">
+                    <thead>
+                    <th>Si</th>
+                    <th>Name</th>
+                    </thead>
+                    <tbody>
+                    <tr  v-for="item1 in lists">
+                        <td >{{ item1.id}}</td>
+                        <td >{{ item1.name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li v-for="item in shoppingItems">
+                        {{ item}}
+                    </li>
+                </ul>
+                <ul>
+                    <li v-for="item1 in lists">
+                        {{ item1.id}} - {{ item1.name}}
+                    </li>
+                </ul>
+			</div>
+
+
+		</div>
+		<!-- /.col-lg-12 -->
+
+
+	</div>
+</div>
+	<!-- /.row -->
+
+
+
+
 
 <!--
 including footer content which is common for all pages
 -->
 <%- include ../layouts/footer.ejs %>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: function(){
+
+            return {messages: '',error: '', shoppingItems: [
+                    {name: 'apple', price: '10'},
+                    {name: 'orange', price: '12'}
+                ],lists:'',data: {name: '', status: ''}}
+        },
+        created: function(){
+            this.list();
+        },
+        methods:{
+
+            insert:function(){
+                var  vueInstance = this;
+                axios.post('/category/store', {
+                    data: this.data
+                }).then(
+                    function(response){
+                        vueInstance.messages = response.data.messages;
+                        vueInstance.error = response.data.error;
+                    }
+                ).catch(function(error){ vueInstance.messages = error; });
+            },
+            list:function () {
+                var  vueInstances = this;
+                axios.get('/category/list', {
+                }).then(
+                    function(response){
+                        console.log(response.data.data)
+                        vueInstances.lists = response.data.data;
+                    }
+                ).catch(function(error){ vueInstances.messages = error; });
+            }
+
+        }
+    })
+</script>
