@@ -43,7 +43,34 @@ module.exports = function(app, passport) {
             email: ''
         })
     })
-
+    // SHOW ADD USER FORM
+    app.get('/category/list',function(req, res, next){
+        // render to views/user/add.ejs
+        req.getConnection(function (error, conn) {
+            conn.query('SELECT * FROM category ORDER BY id DESC ',function(err, rows, fields) {
+                res.render('Category/tables', {
+                    title: 'Add New User',
+                    data: rows
+                })
+        })
+        })
+    })
+    app.post('/endpoint', function(req, res, next) {
+        req.getConnection(function(error, conn) {
+            conn.query('SELECT * FROM category ORDER BY id DESC ',function(err, rows, fields) {
+                //if(err) throw err
+                if (err) {
+                    req.flash('error', err)
+                    res.render('user/list', {
+                        title: 'User List',
+                        data: ''
+                    })
+                } else {
+                    res.json({"data": rows});
+                }
+            })
+        })
+    })
     app.get('/category/list',function(req, res, next){
         req.getConnection(function(error, conn) {
             conn.query('SELECT * from category', function(err, result) {
